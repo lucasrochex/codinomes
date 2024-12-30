@@ -204,11 +204,11 @@ class CodenamesGame(QWidget):
 
     def show_team_blue_words(self):
         #team_words = self.team_blue_words if self.current_team == "Blue" else self.team_red_words
-        QMessageBox.information(self, "Palavras time Azul", f"{', '.join(self.team_blue_words)}")
+        QMessageBox.information(self, "Palavras time Azul", f"{', '.join(self.team_blue_words)} \n\n Palavra proíbida: {self.assassin_word.upper()}")
     
     def show_team_red_words(self):
         #team_words = self.team_blue_words if self.current_team == "Blue" else self.team_red_words
-        QMessageBox.information(self, "Palavras time Vermelho", f"{', '.join(self.team_red_words)}")
+        QMessageBox.information(self, "Palavras time Vermelho", f"{', '.join(self.team_red_words)}\n\n Palavra proíbida: {self.assassin_word.upper()}")
 
 if __name__ == "__main__":
     app = QApplication([])
