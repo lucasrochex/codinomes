@@ -239,7 +239,7 @@ class CodenamesGame(QWidget):
         #team_words = self.team_blue_words if self.current_team == "Blue" else self.team_red_words
         blue_string = ""
         for blue_word in self.team_blue_words:
-            blue_string += f'\n{blue_word}'
+            blue_string += f'\n{blue_word.upper()}'
         #QMessageBox.information(self, "Palavras time Azul", f"{','.join(self.team_blue_words)} \n\n Palavra proíbida: {self.assassin_word.upper()}")
         QMessageBox.information(self, "Palavras time Azul", f"{blue_string} \n\n Palavra proíbida: {self.assassin_word.upper()}")
     
@@ -247,7 +247,7 @@ class CodenamesGame(QWidget):
         #team_words = self.team_blue_words if self.current_team == "Blue" else self.team_red_words
         red_string = ""
         for red_word in self.team_red_words:
-            red_string += f'\n{red_word}'
+            red_string += f'\n{red_word.upper()}'
         #QMessageBox.information(self, "Palavras time Vermelho", f"{', '.join(self.team_red_words)}\n\n Palavra proíbida: {self.assassin_word.upper()}")
         QMessageBox.information(self, "Palavras time Azul", f"{red_string} \n\n Palavra proíbida: {self.assassin_word.upper()}")
 
