@@ -1,5 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout, QGridLayout, QMessageBox
+from PyQt5.QtCore import Qt, QUrl
+from PyQt5 import QtMultimedia
 import random
 
 with open('substantivos.txt', 'r') as file:
@@ -16,6 +18,7 @@ class CodenamesGame(QWidget):
         self.buttons = []  # Store button references
         self.available_words = lines
         self.repetead_words = []
+        self.player = QtMultimedia.QMediaPlayer()
         self.initialize_game()
         self.setup_ui()
 
@@ -152,6 +155,7 @@ class CodenamesGame(QWidget):
     def handle_card_click(self, button):
         word = button.text()
         if word in self.team_blue_words:
+            # Acerto
             if self.current_team == "Blue":
                 button.setStyleSheet("""
                                      background-color: lightblue;
@@ -159,16 +163,24 @@ class CodenamesGame(QWidget):
                                      height: 100 px;
                                      """)
                 self.scores["Blue"] += 1
+                url = QUrl.fromLocalFile('correct.mp3')
+                self.player.setMedia(QtMultimedia.QMediaContent(url))
+                self.player.play()
                 self.team_blue_words.remove(word)
+            # Erro
             else:
                 button.setStyleSheet("""background-color: lightblue; 
                                      font-size: 30px;
                                      height: 100 px;
                                      """)
                 self.scores["Blue"] += 1
+                url = QUrl.fromLocalFile('wrong.mp3')
+                self.player.setMedia(QtMultimedia.QMediaContent(url))
+                self.player.play()
                 self.switch_turn()
 
         elif word in self.team_red_words:
+            # Acerto
             if self.current_team == "Red":
                 button.setStyleSheet("""
                                      background-color: red; 
@@ -176,7 +188,11 @@ class CodenamesGame(QWidget):
                                      height: 100 px;
                                      """)
                 self.scores["Red"] += 1
+                url = QUrl.fromLocalFile('correct.mp3')
+                self.player.setMedia(QtMultimedia.QMediaContent(url))
+                self.player.play()
                 self.team_red_words.remove(word)
+            # Erro
             else:
                 button.setStyleSheet("""
                                      background-color: red;
@@ -184,6 +200,9 @@ class CodenamesGame(QWidget):
                                      height: 100 px;
                                      """)
                 self.scores["Red"] += 1
+                url = QUrl.fromLocalFile('wrong.mp3')
+                self.player.setMedia(QtMultimedia.QMediaContent(url))
+                self.player.play()
                 self.switch_turn()
 
         elif word in self.neutral_words:
@@ -193,6 +212,9 @@ class CodenamesGame(QWidget):
                                  height: 100 px;
                                  """)
             self.neutral_words.remove(word)
+            url = QUrl.fromLocalFile('wrong.mp3')
+            self.player.setMedia(QtMultimedia.QMediaContent(url))
+            self.player.play()
             self.switch_turn()
 
         elif word == self.assassin_word:
@@ -201,6 +223,11 @@ class CodenamesGame(QWidget):
                                  color: white; font-size: 30px;
                                  height: 100 px
                                  """)
+            url = QUrl.fromLocalFile('wrong.mp3')
+            self.player.setMedia(QtMultimedia.QMediaContent(url))
+            self.player.play()
+            self.player.play()
+            self.player.play()
             QMessageBox.critical(self, f"Fim de jogo", f"Palavra assasina!!!")
             self.reset_ui()
             return
@@ -225,9 +252,15 @@ class CodenamesGame(QWidget):
         #self.info_label.setText(f"Team {self.current_team}'s Turn")
         if self.scores['Blue'] == 8:
             QMessageBox.information(self, "Azul ganhou!", f"Vitória do time AZUL!")
+            url = QUrl.fromLocalFile('claps.mp3')
+            self.player.setMedia(QtMultimedia.QMediaContent(url))
+            self.player.play()
             self.reset_ui()
         if self.scores['Red'] == 8:
             QMessageBox.information(self, "Vermelho ganhou!", f"Vitória do time VERMELHO!")
+            url = QUrl.fromLocalFile('claps.mp3')
+            self.player.setMedia(QtMultimedia.QMediaContent(url))
+            self.player.play()
             self.reset_ui()
             
         self.score_label.setText(self.get_score_text())
