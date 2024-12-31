@@ -15,12 +15,12 @@ class CodenamesGame(QWidget):
 
         self.buttons = []  # Store button references
         self.available_words = lines
+        self.repetead_words = []
         self.initialize_game()
         self.setup_ui()
 
     def initialize_game(self):
         # Initialize game variables
-        self.repetead_words = []
         self.available_words = [a for a in self.available_words if a not in self.repetead_words]
         self.words = random.sample(self.available_words, 25)
         random.shuffle(self.words)
@@ -37,13 +37,13 @@ class CodenamesGame(QWidget):
         for word in self.words:
             self.repetead_words.append(word)
 
-
+        print('Repetidas:', self.repetead_words)
         self.current_team = "Blue"
         self.scores = {"Blue": 0, "Red": 0}
 
     def setup_ui(self):
         self.setWindowTitle("Codenomes")
-        self.resize(1200, 1200)
+        self.resize(500, 500)
 
         self.layout = QVBoxLayout()
         self.grid = QGridLayout()
@@ -77,6 +77,16 @@ class CodenamesGame(QWidget):
         self.layout.addWidget(self.score_label)
 
         # Mostrar palavras Time Azul
+        self.switch = QPushButton("Trocar timel")
+        self.switch.setStyleSheet("""
+            height: 40 px;
+            width: 60px;
+            color: purple;      
+        """)
+        self.switch.clicked.connect(self.switch_func)
+        self.layout.addWidget(self.switch)
+
+        # Mostrar palavras Time Azul
         self.show_words_button_blue = QPushButton("Palavras time Azul")
         self.show_words_button_blue.setStyleSheet("""
             height: 40 px;
@@ -97,6 +107,25 @@ class CodenamesGame(QWidget):
         self.layout.addWidget(self.show_words_button_red)
 
         self.setLayout(self.layout)
+
+    def switch_func(self):
+        print('oi')
+        self.switch_turn()
+        cor = ""
+        if  self.current_team == 'Blue':
+            cor = 'Azul'
+            self.info_label.setText(f"Vez do time {cor}")
+            self.info_label.setStyleSheet("""
+                font-size: 40px; 
+                color: blue;      
+            """)
+        else:
+            cor = 'Vermelho'
+            self.info_label.setText(f"Vez do time {cor}")
+            self.info_label.setStyleSheet("""
+                font-size: 40px; 
+                color: red;      
+            """)
 
     def reset_ui(self):
         # Reset words, buttons, and scores
@@ -167,8 +196,12 @@ class CodenamesGame(QWidget):
             self.switch_turn()
 
         elif word == self.assassin_word:
-            button.setStyleSheet("background-color: black; color: white; font-size: 14px;")
-            QMessageBox.critical(self, "Game Over", f"Palavra assasina!!!")
+            button.setStyleSheet("""
+                                 background-color: black; 
+                                 color: white; font-size: 30px;
+                                 height: 100 px
+                                 """)
+            QMessageBox.critical(self, f"Fim de jogo", f"Palavra assasina!!!")
             self.reset_ui()
             return
 
@@ -204,11 +237,19 @@ class CodenamesGame(QWidget):
 
     def show_team_blue_words(self):
         #team_words = self.team_blue_words if self.current_team == "Blue" else self.team_red_words
-        QMessageBox.information(self, "Palavras time Azul", f"{', '.join(self.team_blue_words)} \n\n Palavra proíbida: {self.assassin_word.upper()}")
+        blue_string = ""
+        for blue_word in self.team_blue_words:
+            blue_string += f'\n{blue_word}'
+        #QMessageBox.information(self, "Palavras time Azul", f"{','.join(self.team_blue_words)} \n\n Palavra proíbida: {self.assassin_word.upper()}")
+        QMessageBox.information(self, "Palavras time Azul", f"{blue_string} \n\n Palavra proíbida: {self.assassin_word.upper()}")
     
     def show_team_red_words(self):
         #team_words = self.team_blue_words if self.current_team == "Blue" else self.team_red_words
-        QMessageBox.information(self, "Palavras time Vermelho", f"{', '.join(self.team_red_words)}\n\n Palavra proíbida: {self.assassin_word.upper()}")
+        red_string = ""
+        for red_word in self.team_red_words:
+            red_string += f'\n{red_word}'
+        #QMessageBox.information(self, "Palavras time Vermelho", f"{', '.join(self.team_red_words)}\n\n Palavra proíbida: {self.assassin_word.upper()}")
+        QMessageBox.information(self, "Palavras time Azul", f"{red_string} \n\n Palavra proíbida: {self.assassin_word.upper()}")
 
 if __name__ == "__main__":
     app = QApplication([])
